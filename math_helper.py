@@ -1,6 +1,3 @@
-import math
-
-
 def orientation(p, q, r):
     val = (q[1] - p[1]) * (r[0] - q[0]) - (q[0] - p[0]) * (r[1] - q[1])
     if val == 0:
@@ -41,4 +38,12 @@ def lines_intersect(p1, p2, p3, p4):
 
 
 def distance(p1, p2):
-    return math.sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+    return sqrt((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2)
+
+def sqrt(x):
+    last_guess= x/2.0
+    while True:
+        guess= (last_guess + x/last_guess)/2
+        if abs(guess - last_guess) < .000001: # example threshold
+            return guess
+        last_guess= guess

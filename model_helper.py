@@ -1,5 +1,4 @@
 PROXIMITY_THRESHOLD = 10
-import math
 import math_helper
 
 
