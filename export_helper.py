@@ -1,4 +1,5 @@
 import wx.adv
+import json
 from geojson import LineString, Feature, FeatureCollection, Polygon
 
 def export_helper(path, models, window_size):
@@ -23,14 +24,22 @@ def export_helper(path, models, window_size):
                 fractional_points.append(fractional_points[0])  # Close the polygon
                 polygons.append(fractional_points)
             else:
+                # Remove 'type' property if it exists
+                if "type" in model["custom_properties"]:
+                    del model["custom_properties"]["type"]
+                model["custom_properties"]["name"] = name
                 cur_feature = Feature(geometry=LineString(fractional_points), properties=model["custom_properties"])
                 features.append(cur_feature)
 
         if polygons:
+            # Remove 'type' property if it exists
+            if "type" in group[0]["custom_properties"]:
+                del group[0]["custom_properties"]["type"]
+            group[0]["custom_properties"]["name"] = name
             cur_feature = Feature(geometry=Polygon(polygons), properties=group[0]["custom_properties"])
             features.append(cur_feature)
 
     feature_collection = FeatureCollection(features)
     with open(path + ".json", "w") as f:
-        f.write(str(feature_collection))
+        f.write(json.dumps(feature_collection, indent=4))
         wx.adv.NotificationMessage("Export Successful", f"Exported to {path}.json").Show()

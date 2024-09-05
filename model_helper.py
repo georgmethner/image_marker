@@ -1,6 +1,10 @@
 PROXIMITY_THRESHOLD = 10
 import math_helper
+import random
 
+def random_color():
+    levels = range(8, 256, 8)
+    return [random.choice(levels) for _ in range(3)]
 
 
 class ModelHelper:
@@ -75,7 +79,7 @@ class ModelHelper:
             "points": [],
             "custom_properties" : {
                 "type": "polygon",
-                "color": [87, 227, 137]
+                "color": random_color()
             }
         })
 
