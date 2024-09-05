@@ -37,6 +37,9 @@ class CustomPropertiesSizer(wx.BoxSizer):
         self.property_list.DeleteAllItems()
 
         for name, value in properties.items():
+            if name == "type" or name == "color":
+                continue
+
             index = self.property_list.InsertItem(self.property_list.GetItemCount(), name)
             self.property_list.SetItem(index, 1, str(value))
 
