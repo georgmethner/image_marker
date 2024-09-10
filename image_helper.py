@@ -25,18 +25,31 @@ class ImageHelper():
 
         bitmap_copy = wx.Bitmap(self.original_bitmap.GetWidth(), self.original_bitmap.GetHeight())
         dc = wx.MemoryDC(bitmap_copy)
-        dc.DrawBitmap(self.original_bitmap, 0, 0, True)
+        gc = wx.GraphicsContext.Create(dc)
+        gc.DrawBitmap(self.original_bitmap, 0, 0, self.original_bitmap.GetWidth(), self.original_bitmap.GetHeight())
 
         for i, model in enumerate(models):
             cur_points = model["points"]
+            if not cur_points:
+                continue  # Skip if cur_points is empty
+
             cur_color = model["custom_properties"]["color"]
 
-            dc.SetPen(wx.Pen(cur_color, 0))
             transparency = 153 if i == model_index else 51  # 60% for current, 20% for others
             transparent_color = wx.Colour(cur_color[0], cur_color[1], cur_color[2], transparency)
-            dc.SetBrush(wx.Brush(transparent_color))
-            dc.DrawPolygon(cur_points)
 
+            gc.SetPen(wx.Pen(transparent_color, 0))
+            gc.SetBrush(wx.Brush(transparent_color))
+
+            path = gc.CreatePath()
+            path.MoveToPoint(cur_points[0][0], cur_points[0][1])
+            for point in cur_points[1:]:
+                path.AddLineToPoint(point[0], point[1])
+            path.CloseSubpath()
+
+            gc.FillPath(path)
+
+        del gc
         del dc
 
         self.bmp.SetBitmap(bitmap_copy)
