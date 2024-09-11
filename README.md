@@ -9,7 +9,7 @@ Image Marker is a GUI for creating GeoJson structured Json files.
 - Export the data to a pretty GeoJson file
 
 ### License
-MIT
+This project is licensed under the GNU General Public License v3.0
 
 ### Usage
 Download and run main.py
