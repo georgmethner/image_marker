@@ -27,8 +27,17 @@ class CustomPropertiesSizer(wx.BoxSizer):
             return
         value = wx.GetTextFromUser("Enter property value", "Add Property", parent=self.parent)
 
+        # Try to convert the value to an int or float
+        try:
+            if '.' in value:
+                value = float(value)
+            else:
+                value = int(value)
+        except ValueError:
+            pass  # Keep value as string if conversion fails
+
         index = self.property_list.InsertItem(self.property_list.GetItemCount(), name)
-        self.property_list.SetItem(index, 1, value)
+        self.property_list.SetItem(index, 1, str(value))
 
         self.properties[name] = value
 

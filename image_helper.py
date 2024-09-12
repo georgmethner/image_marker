@@ -38,16 +38,11 @@ class ImageHelper():
             transparency = 153 if i == model_index else 51  # 60% for current, 20% for others
             transparent_color = wx.Colour(cur_color[0], cur_color[1], cur_color[2], transparency)
 
-            gc.SetPen(wx.Pen(transparent_color, 0))
-            gc.SetBrush(wx.Brush(transparent_color))
+            dc.SetPen(wx.Pen(transparent_color, 5))
+            dc.SetBrush(wx.Brush(transparent_color))
 
-            path = gc.CreatePath()
-            path.MoveToPoint(cur_points[0][0], cur_points[0][1])
-            for point in cur_points[1:]:
-                path.AddLineToPoint(point[0], point[1])
-            path.CloseSubpath()
+            dc.DrawPolygon(cur_points)
 
-            gc.FillPath(path)
 
         del gc
         del dc

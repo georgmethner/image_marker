@@ -20,43 +20,7 @@ class ModelHelper:
         if current_model["custom_properties"].get("type") == "line" and len(current_model["points"]) == 2:
             return
 
-        if len(current_model["points"]) < 2:
-            current_model["points"].append((x, y))
-        else:
-            min_distance = float('inf')
-            insert_index = 0
-
-            for i in range(len(current_model["points"])):
-                p = current_model["points"][i]
-                d = math_helper.distance((x, y), p)
-
-                if d < min_distance:
-                    min_distance = d
-                    insert_index = i
-
-            # Handle edge case where insert_index is the last element
-            if insert_index == len(current_model["points"]) - 1:
-                current_model["points"].append((x, y))
-            else:
-                ad = math_helper.distance((x, y), current_model["points"][insert_index + 1])
-                bc = math_helper.distance((x, y), current_model["points"][insert_index - 1])
-
-                if ad < bc:
-                    insert_index += 1
-
-                # Check for line crossings
-                # Check for line crossings
-                new_point = (x, y)
-                for i in range(len(current_model["points"]) - 1):
-                    if i != insert_index and i != insert_index - 1:
-                        if math_helper.lines_intersect(current_model["points"][i], current_model["points"][i + 1],
-                                                       current_model["points"][insert_index], new_point):
-                            # Adjust the insert_index to avoid intersection
-                            insert_index = i + 1
-                            break
-
-                current_model["points"].insert(insert_index, new_point)
-
+        current_model["points"].append((x, y))
 
         if len(current_model["points"]) > 1:
             self.draw_polygon()
