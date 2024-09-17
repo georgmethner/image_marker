@@ -1,4 +1,5 @@
-import wx.adv
+import wx
+import os
 import json
 from geojson import LineString, Feature, FeatureCollection, Polygon
 
@@ -40,6 +41,26 @@ def export_helper(path, models, window_size):
             features.append(cur_feature)
 
     feature_collection = FeatureCollection(features)
-    with open(path + ".json", "w") as f:
+    file_path = path + ".json"
+
+    # Initialize wx App
+    app = wx.App(False)
+
+    # Check if file exists
+    if os.path.exists(file_path):
+        dialog = wx.MessageDialog(None, f"The file {file_path} already exists. Are you sure you want to replace it?", "Confirm Replace", wx.YES_NO | wx.ICON_WARNING)
+        result = dialog.ShowModal()
+        dialog.Destroy()
+        if result != wx.ID_YES:
+            app.MainLoop()
+            return
+
+    # Write to file
+    with open(file_path, "w") as f:
         f.write(json.dumps(feature_collection, indent=4))
-        wx.adv.NotificationMessage("Export Successful", f"Exported to {path}.json").Show()
+
+    # Show success message dialog
+    dialog = wx.MessageDialog(None, f"Exported to {file_path}", "Export Successful", wx.OK)
+    dialog.ShowModal()
+    dialog.Destroy()
+    app.MainLoop()
